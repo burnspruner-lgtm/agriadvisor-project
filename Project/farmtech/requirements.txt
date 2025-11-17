@@ -1,4 +1,6 @@
 # requirements.txt
+
+pip install --upgrade pip
 flask
 psutil
 Werkzeug
@@ -11,4 +13,3 @@ requests
 pandas
 scikit-learn
 google-generative-ai
-pip install --upgrade pip
