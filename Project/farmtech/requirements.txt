@@ -11,4 +11,4 @@ requests
 pandas
 scikit-learn
 google-generative-ai
---upgrade pip
+pip install --upgrade pip
