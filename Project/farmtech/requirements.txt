@@ -1,5 +1,6 @@
 # requirements.txt
 flask
+flask-cors
 psutil
 Werkzeug
 gunicorn
