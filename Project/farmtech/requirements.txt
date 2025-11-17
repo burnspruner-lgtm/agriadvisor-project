@@ -11,3 +11,4 @@ requests
 pandas
 scikit-learn
 google-generative-ai
+--upgrade pip
