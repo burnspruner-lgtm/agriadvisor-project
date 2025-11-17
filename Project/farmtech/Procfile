@@ -1,0 +1,1 @@
+web: gunicorn wsgi:app --threads 4 --timeout 120 --log-level=info

@@ -1,0 +1,17 @@
+{
+    "model_name": "SimulatedLinearRegression-v1.0",
+    "last_trained": 1763250970.7645519,
+    "training_time_sec": 0.017482995986938477,
+    "records_trained": 1600,
+    "performance_metrics": {
+        "mae": 3.941375631579657,
+        "r_squared": 0.6850819726337122
+    },
+    "features_used": [
+        "moisture",
+        "temp",
+        "pump_pressure",
+        "nutrient_level_encoded",
+        "historical_trend_encoded"
+    ]
+}

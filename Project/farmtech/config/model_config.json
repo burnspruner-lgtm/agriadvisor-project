@@ -1,0 +1,35 @@
+{
+    "model_name": "CropYieldPredictor-LSTM-v1.2",
+    "model_type": "LSTM_Sequential",
+    "version": "1.2.5",
+    "last_trained": "2025-11-15T08:30:00Z",
+    
+    "hyperparameters": {
+        "epochs": 50,
+        "batch_size": 32,
+        "learning_rate": 0.001,
+        "sequence_length": 10,
+        "loss_function": "mean_squared_error"
+    },
+    
+    "features_used": [
+        "moisture",
+        "temp",
+        "pump_pressure",
+        "nutrient_level_encoded",
+        "historical_trend_encoded",
+        "prev_day_yield"
+    ],
+    
+    "training_data_split": {
+        "train_size": 0.7,
+        "validation_size": 0.15,
+        "test_size": 0.15
+    },
+    
+    "performance_metrics": {
+        "mae": 0.05,
+        "r_squared": 0.92,
+        "accuracy_classification": "N/A"
+    }
+}

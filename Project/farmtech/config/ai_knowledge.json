@@ -1,0 +1,174 @@
+{
+    "model_version": "FarmTech-Agent-V6.0-Enterprise-Security-Edition",
+    "training_date": "2025-11-15",
+    "developer_context": "DeKUT Mechanical Engineering Project",
+    
+    "system_metadata": {
+        "status": "Production-Ready-Simulation",
+        "last_audit": "2025-11-15",
+        "compliance_standard": "ISO 27001-Simulated-V6.0",
+        "documentation_link": "https://dekut-farmtech.io/docs/v6"
+    },
+    
+    "location_context": {
+        "primary_region": "Kenya_Highlands",
+        "currency": "KES",
+        "primary_crops": ["Tea", "Coffee", "Horticulture", "Pyrethrum"],
+        "weather_pattern": "Equatorial_Highland",
+        "geographical_zones": {
+            "Highlands": {
+                "max_temp_c": 30,
+                "min_moisture_percent": 55,
+                "soil_type": "Volcanic Loam",
+                "risk_profile": "High Altitude Freeze/Hail"
+            },
+            "Coastal": {
+                "max_temp_c": 35,
+                "min_moisture_percent": 45,
+                "soil_type": "Sandy/Coral",
+                "risk_profile": "Drought/High Evaporation"
+            },
+            "Rift_Valley": {
+                "max_temp_c": 32,
+                "min_moisture_percent": 50,
+                "soil_type": "Alluvial",
+                "risk_profile": "Seismic/Heat Stress"
+            }
+        }
+    },
+    
+    "optimal_thresholds": {
+        "moisture_low": 50,
+        "moisture_high": 75,
+        "temp_threshold_critical": 30,
+        "pump_pressure_min_psi": 50,
+        "pump_pressure_max_psi": 95,
+        "cost_limit_kes": 50000,
+        "conflict_critical_action": "ALERT_ENGINEER_PRIVILEGE_LEVEL_3"
+    },
+
+    "ml_model_config": {
+        "model_name": "LSTM-Predictive-Irrigation-V6.0",
+        "confidence_critical_min": 0.5,
+        "confidence_warning_min": 0.75,
+        "training_data_size": 150000,
+        "expected_accuracy": 0.98
+    },
+    
+    
+    "safety_matrix": {
+        "protocols": {
+            "SENSOR_FAILURE": {
+                "check": "moisture == -1 and temp == -1",
+                "response": "ACTION: HALT_ALL_SYSTEMS",
+                "log": "Sensor Failure Detected. System Halted."
+            },
+            "PUMP_OVERLOAD": {
+                "check": "pump_pressure > 95",
+                "response": "ACTION: PUMP_SHUTDOWN_EMERGENCY",
+                "log": "Pump pressure exceeds max threshold. Emergency shutdown initiated to prevent mechanical burst."
+            },
+            "COST_OVERRUN": {
+                "check": "cost_kes > 50000",
+                "response": "ACTION: LOG_FINANCE_HOLD",
+                "log": "Action cost exceeds limit (KES 50,000). Financial hold and deferral."
+            },
+             "CRITICAL_CONFIDENCE_FAIL": {
+                "check": "confidence < 0.5",
+                "response": "ACTION: DEFERRED_SAFETY_CHECK",
+                "log": "Model confidence too low. Deferring action to human override."
+            }
+        },
+        "default_fail_action": "ACTION: DEFERRED_SAFETY_CHECK"
+    },
+
+    "tool_definitions": {
+        "IRRIGATION_BOOST_KES": {"cost": 10000, "impact": "High Moisture Rise", "tool_id": "T001"},
+        "EMERGENCY_COOLING_IRRIGATION_KES": {"cost": 45000, "impact": "Temp Drop + Moisture Rise", "tool_id": "T002"},
+        "ACTIVATE_DRAINAGE_PUMP": {"cost": 5000, "impact": "Moisture Drop", "tool_id": "T003"},
+        "SCHEDULE_FERTILIZER_DRONE_KES": {"cost": 12000, "impact": "Nutrient Rise (Delayed)", "tool_id": "T004"},
+        "LOG_MAINTENANCE_TICKET_LOW_PRESSURE": {"cost": 0, "impact": "Engineering Dispatch", "tool_id": "T005"},
+        "SCHEDULE_ENGINEER_INSPECTION": {"cost": 0, "impact": "Human Intervention Required", "tool_id": "T006"},
+        "MONITOR_QUIETLY": {"cost": 0, "impact": "None", "tool_id": "T007"},
+        "DATA_INTEGRITY_CHECK": {"cost": 0, "impact": "Halt Decision", "tool_id": "T008"}
+    },
+    
+    "decision_tree": [
+        {
+            "id": "R001_MECH_HIST_OVERRIDE",
+            "condition": "prediction == Optimal Irrigation Recommended and historical_trend == HIGH_INTERVENTION",
+            "action": "ACTION: SCHEDULE_ENGINEER_INSPECTION",
+            "log": "R001: Overriding optimal prediction. Field instability is HIGH. Critical human intervention scheduled."
+        },"priority": 10
+        {
+            "id": "R002_MECH_PUMP_LOW",
+            "condition": "pump_pressure < 50",
+            "action": "ACTION: LOG_MAINTENANCE_TICKET_LOW_PRESSURE",
+            "log": "R002: Pump pressure below 50 psi. Logging ticket for preventive mechanical maintenance."
+            "priority": 0
+        },
+        {
+            "id": "R003_CRIT_HEAT_COOLING",
+            "condition": "moisture < 60 and temp > 30 and cost_kes < 50000",
+            "action": "ACTION: EMERGENCY_COOLING_IRRIGATION_KES",
+            "log": "R003: Extreme heat and moisture deficit detected. Initiating high-cost emergency cooling."
+            "priority": 5
+        },
+        {
+            "id": "R004_CRIT_FLOOD",
+            "condition": "moisture > 90",
+            "action": "ACTION: ACTIVATE_DRAINAGE_PUMP",
+            "log": "R004: Moisture critically high. Activating drainage pump to prevent crop loss due to waterlogging."
+            "priority": 10
+        },
+        {
+            "id": "R005_FERT_SCHEDULE",
+            "condition": "nutrient_level == LOW and moisture >= 50",
+            "action": "ACTION: SCHEDULE_FERTILIZER_DRONE_KES",
+            "log": "R005: Nutrients low, but moisture is safe. Scheduling drone fertilizer application."
+            "priority": 10
+        },
+        {
+            "id": "R006_STANDARD_IRRIGATION",
+            "condition": "prediction == Optimal Irrigation Recommended and moisture < 60 and temp <= 30 and cost_kes < 15000",
+            "action": "ACTION: IRRIGATION_BOOST_KES",
+            "log": "R006: Standard irrigation required. Low temperature, acceptable cost."
+            "priority": 0
+        },
+        {
+            "id": "R007_ENERGY_SAVING",
+            "condition": "prediction == Optimal Irrigation Recommended and moisture >= 70 and temp < 20",
+            "action": "ACTION: MONITOR_QUIETLY_ENERGY_SAVE",
+            "log": "R007: Moisture is high, temperature low. Deferring action for energy savings."
+            "priority": 10
+        },
+        {
+            "id": "R008_DATA_INTEGRITY",
+            "condition": "prediction == Schema Validation Failed",
+            "action": "ACTION: DATA_INTEGRITY_CHECK",
+            "log": "R008: Data integrity failed. Halting decision process until clean data received."
+            "priority": 0
+        },
+        {
+            "id": "R009_LONG_TERM_DEFERRED",
+            "condition": "prediction == Optimal Irrigation Recommended and historical_trend == NORMAL and moisture >= 60 and nutrient_level == OPTIMAL",
+            "action": "ACTION: DEFERRED_LONG_TERM_PLANNING",
+            "log": "R009: All metrics optimal. Deferring to long-term predictive maintenance schedules."
+            "priority": 10
+        },
+        {
+            "id": "R010_COASTAL_HEAT_TOLERANCE_CHECK",
+            "condition": "temp > 33 and moisture < 48 and geographical_zone == Coastal",
+            "action": "ACTION: REGIONAL_IRRIGATION_COASTAL",
+            "log": "R010: Coastal high-heat override. Applying regional irrigation plan."
+            "priority": 5
+        }
+        {
+            "id": "R011_PREVENTATIVE_MAINTENANCE",
+            "condition": "prediction == 'Optimal Irrigation Recommended' and moisture < 60 and temp > 28 and historical_trend == 'HIGH_INTERVENTION'",
+            "action": "ACTION: SCHEDULE_ENGINEER_INSPECTION",
+            "log": "R011: Conditions require irrigation, but high temp and a history of intervention suggest a potential hardware failure. Logging inspection ticket instead of acting."
+            "priority": 5
+        }
+    ]
+}
